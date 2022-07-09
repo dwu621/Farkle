@@ -27,23 +27,30 @@ function updateDiceImg(){
 		diceImage = "images/" + (diceArr[i].value) + ".png";  // changed the variable to get correct object
 		document.getElementById(diceArr[i].id).setAttribute("src", diceImage);
 	}
-	checkFarkle()
+	if(checkFarkle()) {
+		console.log("farkle")
+
+	} else {
+		console.log('keep playing')
+	}
 }
 
 // Checks if roll is farkle
-let farkle = true
 
 const checkFarkle = () => {
-
+	let farkle = true
 	let value = []
 	let threeOfKind = false
 	for (let i = 0; i < 6; i ++) {
-		value.push(diceArr[i].value)
+		if (diceArr[i].clicked === 0) // this will prevent selected die from previous turn from being checked
+			value.push(diceArr[i].value)
 	}
 	value.sort((a, b) => a - b)
 	for (let i = 0; i < value.length; i ++) {
-		if (value[i] === value[i + 1] && value[i] === value[i + 2]) {
-			threeOfKind = true
+		if (value.length >= 3) {  // this will only check for 3ofkind if there are 3 die left
+			if (value[i] === value[i + 1] && value[i] === value[i + 2]) {
+				threeOfKind = true
+			}
 		}
 		if (value[i] === 1 || value[i] === 5 || threeOfKind) {
 			farkle = false
@@ -51,7 +58,6 @@ const checkFarkle = () => {
 		
 	}
 	return farkle
-	
 }
 
 
@@ -61,10 +67,11 @@ function diceClick(img){
 
 	img.classList.toggle("transparent");
 	if(diceArr[i].clicked === 0){
-		diceArr[i].clicked == 1;
-	}
+		diceArr[i].clicked = 1; //changed the == to = so it can save state correctly
+	}	
 	else{
-		diceArr[i].clicked == 0;
+		diceArr[i].clicked = 0; //changed the == to =
 	}
+	console.log(diceArr[i].clicked)
 
 }
